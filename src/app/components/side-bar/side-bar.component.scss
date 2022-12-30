@@ -1,0 +1,11 @@
+.icon {
+  @apply hover:bg-accent flex justify-center p-3 rounded-full hover:rounded-3xl bg-base-100 duration-100 ease-linear;
+
+  .indicator {
+    @apply absolute left-0 bg-accent-content w-1 h-10 rounded-md;
+  }
+
+  .tooltip {
+    @apply absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all;
+  }
+}
