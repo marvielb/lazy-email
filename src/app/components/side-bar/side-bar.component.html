@@ -1,0 +1,29 @@
+<div class="gap-4 min-h-screen w-20 flex flex-col bg-base-300 items-center">
+  <a
+    *ngFor="let icon of icons; index as i"
+    [routerLink]="icon.urlPath"
+    [ngClass]="i == 0 ? 'mt-4' : ''"
+    class="group hover:bg-accent flex justify-center p-3 rounded-full hover:rounded-3xl bg-base-100 duration-100 ease-linear"
+  >
+    <div
+      [routerLinkActive]="['scale-100']"
+      class="absolute left-0 bg-accent-content w-1 h-10 rounded-md scale-0"
+    ></div>
+
+    <svg
+      class="w-9 h-9 fill-accent-focus group-hover:fill-accent-content"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      [attr.viewBox]="icon.viewBox"
+    >
+      <svg:g>
+        <svg:path [attr.d]="icon.svgPath"></svg:path>
+      </svg:g>
+    </svg>
+    <div
+      class="absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all"
+    >
+      {{ icon.tooltip }}
+    </div>
+  </a>
+</div>
