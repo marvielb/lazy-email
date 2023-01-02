@@ -9,3 +9,7 @@
     @apply absolute left-0 bg-accent-content w-1 h-10 rounded-md;
   }
 }
+
+.icon-selected {
+  @apply bg-accent rounded-3xl;
+}

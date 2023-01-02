@@ -2,12 +2,14 @@
   <a
     *ngFor="let icon of icons; index as i"
     [routerLink]="icon.urlPath"
+    [routerLinkActive]="['icon-selected']"
     [ngClass]="i == 0 ? 'mt-4' : ''"
     class="group icon"
   >
-    <div [routerLinkActive]="['scale-100']" class="indicator scale-0"></div>
+    <div [routerLinkActive]="['!scale-100']" class="indicator scale-0"></div>
 
     <svg
+      [routerLinkActive]="['!fill-accent-content']"
       class="w-9 h-9 fill-accent-focus group-hover:fill-accent-content"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
@@ -18,7 +20,7 @@
       </svg:g>
     </svg>
     <div
-      class="absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all"
+      class="absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all shadow-md"
     >
       {{ icon.tooltip }}
     </div>
