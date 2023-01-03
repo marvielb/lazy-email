@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { SideBarIcon } from './side-bar-icon.model';
+import { SideBarService } from './side-bar.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -7,6 +9,12 @@ import { SideBarIcon } from './side-bar-icon.model';
   styleUrls: ['./side-bar.component.scss'],
 })
 export class SideBarComponent {
+  $shouldShow: Observable<boolean>;
+
+  constructor(protected service: SideBarService) {
+    this.$shouldShow = this.service.$shouldShow;
+  }
+
   icons: Array<SideBarIcon> = [
     {
       svgPath:

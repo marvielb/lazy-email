@@ -1,4 +1,4 @@
-<div class="layout">
+<div class="layout" *ngIf="$shouldShow | async">
   <a
     *ngFor="let icon of icons; index as i"
     [routerLink]="icon.urlPath"
@@ -10,7 +10,7 @@
 
     <svg
       [routerLinkActive]="['!fill-accent-content']"
-      class="w-9 h-9 fill-accent-focus group-hover:fill-accent-content"
+      class="w-9 h-9 fill-accent group-hover:fill-accent-content"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
       [attr.viewBox]="icon.viewBox"
@@ -20,7 +20,7 @@
       </svg:g>
     </svg>
     <div
-      class="absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all shadow-md"
+      class="absolute left-14 ml-7 px-2 py-1 bg-base-300 rounded-md scale-0 group-hover:scale-100 transition-all shadow-md z-10"
     >
       {{ icon.tooltip }}
     </div>
