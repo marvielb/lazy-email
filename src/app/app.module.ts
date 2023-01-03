@@ -5,12 +5,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SendComponent } from './pages/send/send.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { SideBarToggleComponent } from './components/side-bar/side-bar-toggle/side-bar-toggle.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SendComponent,
-    SideBarComponent
+    SideBarComponent,
+    SideBarToggleComponent
   ],
   imports: [
     BrowserModule,
