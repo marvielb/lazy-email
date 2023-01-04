@@ -1,1 +1,79 @@
-<p>send works!</p>
+<div>
+  <div class="card w-screen h-screen bg-base-100 max-w-5xl">
+    <div class="card-body">
+      <h2 class="card-title">
+        <app-side-bar-toggle class="md:hidden"></app-side-bar-toggle>
+        <span class="ml-2 md:ml-0">Send Lazy Emails</span>
+      </h2>
+      <select class="select w-full mt-7 bg-base-300">
+        <option disabled selected>Pick Template</option>
+        <option>Homer</option>
+        <option>Marge</option>
+        <option>Bart</option>
+        <option>Lisa</option>
+        <option>Maggie</option>
+      </select>
+      <div class="block md:flex">
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">To</span>
+          </label>
+          <input type="text" class="input w-full bg-base-300" />
+        </div>
+        <div class="form-control w-full mt-2 md:ml-5 md:mt-0">
+          <label class="label">
+            <span class="label-text">CC</span>
+          </label>
+          <input type="text" class="input w-full bg-base-300" />
+        </div>
+      </div>
+      <div class="border-4 border-base-200 card w-full bg-base-100 mt-4">
+        <div class="card-body">
+          <h2 class="card-title">Fields</h2>
+          <div class="flex gap-x-12 gap-y-4 flex-wrap justify-center">
+            <div class="form-control w-full md:basis-5/12">
+              <label class="label">
+                <span class="label-text">Department</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12 flex-shrink">
+              <label class="label">
+                <span class="label-text">Enhancements</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12 flex-shrink">
+              <label class="label">
+                <span class="label-text">Time</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12">
+              <label class="label">
+                <span class="label-text">Department</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12 flex-shrink">
+              <label class="label">
+                <span class="label-text">Enhancements</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12 flex-shrink">
+              <label class="label">
+                <span class="label-text">Time</span>
+              </label>
+              <input type="text" class="input w-full bg-base-300" />
+            </div>
+            <div class="form-control w-full md:basis-5/12 flex-shrink"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-actions justify-end mt-6">
+        <button class="btn btn-primary">SEND</button>
+      </div>
+    </div>
+  </div>
+</div>
