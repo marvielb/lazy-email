@@ -30,8 +30,8 @@
   </a>
 </div>
 <div
-  class="absolute left-20 duration-200 ease-linear overflow-y-auto overscroll-none"
-  [ngClass]="($shouldShow | async) == false ? ['!left-0'] : ['']"
+  class="ml-20 duration-200 ease-linear max-h-screen overflow-auto"
+  [ngClass]="($shouldShow | async) == false ? ['!ml-0'] : ['']"
 >
   <router-outlet></router-outlet>
 </div>

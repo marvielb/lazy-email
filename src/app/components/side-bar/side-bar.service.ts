@@ -13,7 +13,7 @@ export class SideBarService {
     this.$show = new BehaviorSubject<boolean>(true);
     this.$shouldShow = merge(
       this.$show.asObservable(),
-      media('(min-width: 768px)')
+      media('(min-width: 1024px)')
     ).pipe(shareReplay(1));
   }
 
