@@ -9,7 +9,10 @@
     [ngClass]="i == 0 ? 'mt-4' : ''"
     class="group icon"
   >
-    <div [routerLinkActive]="['!scale-100']" class="indicator scale-0"></div>
+    <div
+      [routerLinkActive]="['!scale-100']"
+      class="indicator scale-0 duration-200 ease-in"
+    ></div>
 
     <svg
       [routerLinkActive]="['!fill-accent-content']"
