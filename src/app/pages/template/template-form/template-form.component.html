@@ -28,18 +28,79 @@
           />
         </div>
       </div>
-      <div class="border-4 border-base-200 card w-full bg-base-100 mt-4">
+      <div
+        class="border-4 border-base-200 card w-full h-fit max-h-96 bg-base-100 mt-4"
+      >
         <div class="card-body">
-          <h2 class="card-title">Fields</h2>
-          <div class="flex gap-x-12 gap-y-4 flex-wrap justify-center">
-            <div
-              *ngFor="let field of template.fields"
-              class="form-control w-full md:basis-5/12"
-            >
-              <label class="label">
-                <span class="label-text">{{ field.name }}</span>
-              </label>
-              <input type="text" class="input w-full bg-base-300" />
+          <div class="flex gap-5">
+            <h2 class="card-title">Fields</h2>
+            <button class="btn btn-circle btn-accent">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M11 19v-6H5v-2h6V5h2v6h6v2h-6v6Z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex gap-x-12 gap-y-4 flex-wrap justify-center mt-2">
+            <div class="overflow-x-auto w-full">
+              <table class="table w-full table-compact">
+                <!-- head -->
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th class="w-0">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row 1 -->
+                  <tr *ngFor="let field of template.fields; index as i">
+                    <th>{{ i + 1 }}</th>
+                    <td>{{ field.id }}</td>
+                    <td>{{ field.name }}</td>
+                    <td>
+                      <button class="btn btn-circle btn-outline btn-secondary">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="m19.3 8.925l-4.25-4.2l1.4-1.4q.575-.575 1.413-.575q.837 0 1.412.575l1.4 1.4q.575.575.6 1.388q.025.812-.55 1.387ZM17.85 10.4L7.25 21H3v-4.25l10.6-10.6Z"
+                          />
+                        </svg>
+                      </button>
+                      <button class="btn btn-circle btn-outline ml-1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 256 256"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M216 48h-40v-8a24.1 24.1 0 0 0-24-24h-48a24.1 24.1 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16ZM96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0Zm48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0Z"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
