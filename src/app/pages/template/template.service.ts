@@ -24,7 +24,7 @@ export class TemplateService {
       {
         id: '2',
         name: 'Request for Backup',
-        defaultTo: 'it@example.com',
+        defaultTo: 'it2@example.com',
         defaultCC: '',
         fields: [
           { id: 'date_today', name: 'Date Today' },

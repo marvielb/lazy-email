@@ -1,7 +1,9 @@
 <div
   class="gap-4 min-h-screen max-h-screen max-w-xs bg-base-200 duration-200 ease-linear absolute z-40 left-20 overflow-auto"
   [ngClass]="
-    (sideBarService.$shouldShow | async) == false ? ['-translate-x-full'] : ['']
+    (sideBarService.$shouldShow | async) == false
+      ? ['-translate-x-full', '!left-0']
+      : ['']
   "
 >
   <h1 class="card-title p-4 text-2xl">
@@ -14,12 +16,16 @@
         routerLinkActive="active"
         [routerLink]="[template.id]"
         class="whitespace-nowrap overflow-hidden overflow-ellipsis max-w-full inline-block"
+        (click)="sideBarService.toggle()"
       >
         {{ template.name }}
       </a>
     </li>
   </ul>
 </div>
-<div class="ml-60 duration-200 ease-linear max-h-screen overflow-auto">
+<div
+  class="ml-60 duration-200 min-w-full md:min-w-0 ease-linear overflow-auto"
+  [ngClass]="(sideBarService.$shouldShow | async) == false ? ['ml-0'] : ['']"
+>
   <router-outlet></router-outlet>
 </div>
