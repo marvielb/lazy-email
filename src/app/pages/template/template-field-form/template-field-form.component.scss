@@ -1,1 +1,3 @@
- 
+input.ng-invalid:not(.ng-pristine) {
+  @apply input-error;
+}

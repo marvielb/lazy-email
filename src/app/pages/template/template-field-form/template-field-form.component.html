@@ -11,6 +11,14 @@
           class="input w-full bg-base-300"
           formControlName="id"
         />
+        <ng-container *ngIf="id?.dirty">
+          <label *ngIf="id?.errors?.['required']" class="label">
+            <span class="label-text-alt text-error">ID is required</span>
+          </label>
+          <label *ngIf="id?.errors?.['uniqueID']" class="label">
+            <span class="label-text-alt text-error">ID must be unique</span>
+          </label>
+        </ng-container>
       </div>
       <div class="form-control w-full mt-2 md:ml-5 md:mt-0">
         <label class="label">
@@ -21,13 +29,23 @@
           class="input w-full bg-base-300"
           formControlName="name"
         />
+        <ng-container *ngIf="name?.dirty">
+          <label *ngIf="name?.errors?.['required']" class="label">
+            <span class="label-text-alt text-error">Name is required</span>
+          </label>
+        </ng-container>
       </div>
     </div>
     <div class="modal-action">
       <label for="my-modal-5" class="btn btn-outline" (click)="close()">
         CLOSE
       </label>
-      <label for="my-modal-5" class="btn btn-primary" (click)="save()">
+      <label
+        [ngClass]="this.form.valid && this.form.dirty ? '' : 'btn-disabled'"
+        for="my-modal-5"
+        class="btn btn-primary"
+        (click)="save()"
+      >
         SAVE
       </label>
     </div>

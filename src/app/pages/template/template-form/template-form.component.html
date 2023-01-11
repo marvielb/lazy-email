@@ -1,5 +1,8 @@
 <div *ngIf="selectedTemplate$ | async as template" class="flex justify-center">
-  <div [formGroup]="form" class="card w-full h-screen bg-base-100 max-w-5xl">
+  <div
+    [formGroup]="templateFormService.form"
+    class="card w-full h-screen bg-base-100 max-w-5xl"
+  >
     <div class="card-body">
       <h2 class="card-title">
         <app-side-bar-toggle class="lg:hidden"></app-side-bar-toggle>
@@ -68,7 +71,12 @@
                 </thead>
                 <tbody>
                   <!-- row 1 -->
-                  <tr *ngFor="let field of formFields.controls; index as i">
+                  <tr
+                    *ngFor="
+                      let field of this.templateFormService.formFields.controls;
+                      index as i
+                    "
+                  >
                     <th>{{ i + 1 }}</th>
                     <td>{{ field.get("id")!.value }}</td>
                     <td>{{ field.get("name")!.value }}</td>
@@ -124,7 +132,12 @@
       <div class="card-actions justify-end mt-6">
         <button
           class="btn btn-primary"
-          [ngClass]="this.form.dirty && this.form.valid ? '' : 'btn-disabled'"
+          [ngClass]="
+            this.templateFormService.form.dirty &&
+            this.templateFormService.form.valid
+              ? ''
+              : 'btn-disabled'
+          "
           (click)="updateTemplate(template.id)"
         >
           SAVE
