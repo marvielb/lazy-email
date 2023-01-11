@@ -1,5 +1,5 @@
 <div *ngIf="selectedTemplate$ | async as template" class="flex justify-center">
-  <div class="card w-full h-screen bg-base-100 max-w-5xl">
+  <div [formGroup]="form" class="card w-full h-screen bg-base-100 max-w-5xl">
     <div class="card-body">
       <h2 class="card-title">
         <app-side-bar-toggle class="lg:hidden"></app-side-bar-toggle>
@@ -14,7 +14,7 @@
           <input
             type="text"
             class="input w-full bg-base-300"
-            [value]="template.defaultTo"
+            formControlName="defaultTo"
           />
         </div>
         <div class="form-control w-full mt-2 md:ml-5 md:mt-0">
@@ -24,11 +24,12 @@
           <input
             type="text"
             class="input w-full bg-base-300"
-            [value]="template.defaultCC"
+            formControlName="defaultCC"
           />
         </div>
       </div>
       <div
+        formArrayName="fields"
         class="border-4 border-base-200 card w-full h-fit max-h-96 bg-base-100 mt-4"
       >
         <div class="card-body">
@@ -64,10 +65,10 @@
                 </thead>
                 <tbody>
                   <!-- row 1 -->
-                  <tr *ngFor="let field of template.fields; index as i">
+                  <tr *ngFor="let field of formFields.controls; index as i">
                     <th>{{ i + 1 }}</th>
-                    <td>{{ field.id }}</td>
-                    <td>{{ field.name }}</td>
+                    <td>{{ field.get("id")!.value }}</td>
+                    <td>{{ field.get("name")!.value }}</td>
                     <td>
                       <button class="btn btn-circle btn-outline btn-secondary">
                         <svg
@@ -110,7 +111,7 @@
           <h2 class="card-title">Body</h2>
           <div class="flex justify-center h-full mt-3">
             <textarea
-              [value]="template.body"
+              formControlName="body"
               class="textarea bg-base-300 w-full h-full resize-none"
               placeholder=""
             ></textarea>
@@ -118,7 +119,13 @@
         </div>
       </div>
       <div class="card-actions justify-end mt-6">
-        <button class="btn btn-primary">SAVE</button>
+        <button
+          class="btn btn-primary"
+          [ngClass]="this.form.dirty && this.form.valid ? '' : 'btn-disabled'"
+          (click)="updateTemplate(template.id)"
+        >
+          SAVE
+        </button>
       </div>
     </div>
   </div>

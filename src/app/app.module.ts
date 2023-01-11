@@ -8,6 +8,7 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { SideBarToggleComponent } from './components/side-bar/side-bar-toggle/side-bar-toggle.component';
 import { TemplateSidebarComponent } from './pages/template/template-sidebar/template-sidebar.component';
 import { TemplateFormComponent } from './pages/template/template-form/template-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,13 +17,10 @@ import { TemplateFormComponent } from './pages/template/template-form/template-f
     SideBarComponent,
     SideBarToggleComponent,
     TemplateSidebarComponent,
-    TemplateFormComponent
+    TemplateFormComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, shareReplay, take } from 'rxjs';
 import { Template } from './template.model';
 
 @Injectable({
@@ -33,5 +33,16 @@ export class TemplateService {
         body: 'Hi, programmers department would like to request for a backup on {{ date_today }} with the database name: {{ database_name }}',
       },
     ]);
+  }
+
+  updateTemplate(id: string, template: Template) {
+    this.templates$
+      .pipe(take(1))
+      .subscribe((templates) =>
+        this._templates$.next([
+          ...templates.filter((t) => t.id != id),
+          template,
+        ])
+      );
   }
 }
