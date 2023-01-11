@@ -1,3 +1,4 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +13,7 @@ import {
   tap,
 } from 'rxjs';
 import { Field } from '../field.model';
+import { TemplateFieldFormComponent } from '../template-field-form/template-field-form.component';
 import { Template } from '../template.model';
 import { TemplateService } from '../template.service';
 
@@ -39,7 +41,8 @@ export class TemplateFormComponent {
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: Dialog
   ) {
     this.selectedTemplate$ = combineLatest([
       this.route.paramMap,
@@ -89,5 +92,9 @@ export class TemplateFormComponent {
       }),
     });
     this.reload$.next(null);
+  }
+
+  onAddFieldClick() {
+    this.dialog.open(TemplateFieldFormComponent);
   }
 }
