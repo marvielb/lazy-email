@@ -81,7 +81,10 @@
                     <td>{{ field.get("id")!.value }}</td>
                     <td>{{ field.get("name")!.value }}</td>
                     <td>
-                      <button class="btn btn-circle btn-outline btn-secondary">
+                      <button
+                        (click)="onEditFieldClick(i, field.value)"
+                        class="btn btn-circle btn-outline btn-secondary"
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -96,7 +99,7 @@
                         </svg>
                       </button>
                       <button
-                        (click)="onDeleteClick(i)"
+                        (click)="onDeleteFieldClick(i)"
                         class="btn btn-circle btn-outline ml-1"
                       >
                         <svg

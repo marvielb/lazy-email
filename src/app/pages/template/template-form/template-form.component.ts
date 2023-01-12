@@ -77,13 +77,20 @@ export class TemplateFormComponent {
     this.dialog.open(TemplateFieldFormComponent);
   }
 
-  onDeleteClick(i: number) {
+  onEditFieldClick(i: number, field: Field) {
+    this.dialog.open(TemplateFieldFormComponent, { data: { index: i, field } });
+  }
+
+  onDeleteFieldClick(i: number) {
     this.confirmDialog
       .open({
         title: 'Confirmation',
         content: 'Are you sure you want to delete?',
       })
       .pipe(filter((c) => c == true))
-      .subscribe((c) => this.templateFormService.formFields.removeAt(i));
+      .subscribe(() => {
+        this.templateFormService.formFields.removeAt(i);
+        this.templateFormService.form.markAsDirty();
+      });
   }
 }

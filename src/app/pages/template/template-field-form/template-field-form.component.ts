@@ -1,5 +1,5 @@
-import { DialogRef } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { Component, Inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -8,6 +8,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { filter } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { TemplateFormService } from '../template-form.service';
 
 @Component({
@@ -18,13 +20,16 @@ import { TemplateFormService } from '../template-form.service';
 export class TemplateFieldFormComponent {
   form = this.fb.group({
     id: [
-      '',
+      this.data ? this.data.field.id : '',
       [
         Validators.required,
-        this.uniqueIDValidator(this.formService.formFields),
+        this.uniqueIDValidator(
+          this.data ? this.data.index : null,
+          this.formService.formFields
+        ),
       ],
     ],
-    name: ['', [Validators.required]],
+    name: [this.data ? this.data.field.name : '', [Validators.required]],
   });
 
   get id() {
@@ -38,25 +43,44 @@ export class TemplateFieldFormComponent {
   constructor(
     public dialogRef: DialogRef<string>,
     private fb: FormBuilder,
-    private formService: TemplateFormService
+    private formService: TemplateFormService,
+    @Inject(DIALOG_DATA) public data: any,
+    private confirmDialogService: ConfirmDialogService
   ) {}
 
   close() {
-    this.dialogRef.close();
+    if (this.form.dirty == false) {
+      this.dialogRef.close();
+    } else {
+      this.confirmDialogService
+        .open({
+          title: 'Confirmation',
+          content: 'All of the unsaved changes will be lost, continue?',
+        })
+        .pipe(filter((c) => c == true))
+        .subscribe(() => this.dialogRef.close());
+    }
   }
 
   save() {
-    this.formService.formFields.push(this.form);
-    this.formService.form.markAsDirty();
-    this.dialogRef.close();
+    if (this.data) {
+      const fieldForm = this.formService.formFields.at(this.data.index);
+      fieldForm.setValue(this.form.value);
+      this.formService.form.markAsDirty();
+      this.dialogRef.close();
+    } else {
+      this.formService.formFields.push(this.form);
+      this.formService.form.markAsDirty();
+      this.dialogRef.close();
+    }
   }
 
-  uniqueIDValidator(fields: FormArray): ValidatorFn {
+  uniqueIDValidator(excludedIndex: number, fields: FormArray): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const unique = fields.controls.some(
-        (c) => c.get('id')!.value == control.value
-      );
-      return unique ? { uniqueID: { value: control.value } } : null;
+      const notUnique = fields.controls
+        .filter((_, i) => i != excludedIndex)
+        .some((c) => c.get('id')!.value == control.value);
+      return notUnique ? { uniqueID: { value: control.value } } : null;
     };
   }
 }
