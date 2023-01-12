@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
   map,
   Observable,
   shareReplay,
@@ -11,6 +12,7 @@ import {
   take,
   tap,
 } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { Field } from '../field.model';
 import { TemplateFieldFormComponent } from '../template-field-form/template-field-form.component';
 import { TemplateFormService } from '../template-form.service';
@@ -30,7 +32,8 @@ export class TemplateFormComponent {
     private route: ActivatedRoute,
     private templateService: TemplateService,
     protected templateFormService: TemplateFormService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private confirmDialog: ConfirmDialogService
   ) {
     this.selectedTemplate$ = combineLatest([
       this.route.paramMap,
@@ -72,5 +75,15 @@ export class TemplateFormComponent {
 
   onAddFieldClick() {
     this.dialog.open(TemplateFieldFormComponent);
+  }
+
+  onDeleteClick(i: number) {
+    this.confirmDialog
+      .open({
+        title: 'Confirmation',
+        content: 'Are you sure you want to delete?',
+      })
+      .pipe(filter((c) => c == true))
+      .subscribe((c) => this.templateFormService.formFields.removeAt(i));
   }
 }

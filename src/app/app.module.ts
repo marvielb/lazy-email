@@ -11,6 +11,7 @@ import { TemplateFormComponent } from './pages/template/template-form/template-f
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from '@angular/cdk/dialog';
 import { TemplateFieldFormComponent } from './pages/template/template-field-form/template-field-form.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { TemplateFieldFormComponent } from './pages/template/template-field-form
     TemplateSidebarComponent,
     TemplateFormComponent,
     TemplateFieldFormComponent,
+    ConfirmDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, DialogModule],
   providers: [],
