@@ -27,7 +27,8 @@ export class UnsavedGuard implements CanDeactivate<unknown> {
     }
     return component.confirmDialog.open({
       title: 'Confirmation',
-      content: 'All unsaved changes will be lost!',
+      content:
+        'Are you sure you want to leave this page? All unsaved changes will be lost!',
     });
   }
 }
