@@ -31,9 +31,9 @@ export class TemplateFormComponent {
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    protected templateFormService: TemplateFormService,
+    public templateFormService: TemplateFormService,
     private dialog: Dialog,
-    private confirmDialog: ConfirmDialogService
+    public confirmDialog: ConfirmDialogService
   ) {
     this.selectedTemplate$ = combineLatest([
       this.route.paramMap,
