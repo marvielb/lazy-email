@@ -34,12 +34,10 @@ export class TemplateFormComponent implements OnDestroy {
     public confirmDialog: ConfirmDialogService,
     private router: Router
   ) {
-    const src = combineLatest([
+    this.selectedTemplate$ = combineLatest([
       this.route.paramMap,
       this.templateService.templates$,
-    ]);
-
-    this.selectedTemplate$ = src.pipe(
+    ]).pipe(
       map(([params, templates]): Template | undefined =>
         templates.find((t) => t.id == params.get('id'))
       ),
@@ -55,19 +53,19 @@ export class TemplateFormComponent implements OnDestroy {
         this.templateFormService.setValue(template!);
       });
 
-    src.pipe(takeUntil(this.onDestroy$)).subscribe(([params, templates]) => {
-      const template = templates.find((t) => t.id == params.get('id'));
+    combineLatest([this.selectedTemplate$, this.templateService.templates$])
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(([template, templates]) => {
+        if (template !== undefined) return;
 
-      if (template !== undefined) return;
-
-      if (templates.length > 0) {
-        this.router.navigate([templates[0].id], {
-          relativeTo: this.route.parent,
-        });
-      } else {
-        this.router.navigate(['../'], { relativeTo: this.route });
-      }
-    });
+        if (templates.length > 0) {
+          this.router.navigate([templates[0].id], {
+            relativeTo: this.route.parent,
+          });
+        } else {
+          this.router.navigate(['../'], { relativeTo: this.route });
+        }
+      });
   }
   ngOnDestroy(): void {
     this.onDestroy$.next();
