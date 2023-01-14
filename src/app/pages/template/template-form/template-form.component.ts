@@ -1,16 +1,14 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  BehaviorSubject,
   combineLatest,
   filter,
   map,
   Observable,
   shareReplay,
-  switchMap,
-  take,
-  tap,
+  Subject,
+  takeUntil,
 } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { Field } from '../field.model';
@@ -24,34 +22,56 @@ import { TemplateService } from '../template.service';
   templateUrl: './template-form.component.html',
   styleUrls: ['./template-form.component.scss'],
 })
-export class TemplateFormComponent {
+export class TemplateFormComponent implements OnDestroy {
   selectedTemplate$: Observable<Template | undefined>;
-  reload$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  onDestroy$: Subject<void> = new Subject();
 
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
     public templateFormService: TemplateFormService,
     private dialog: Dialog,
-    public confirmDialog: ConfirmDialogService
+    public confirmDialog: ConfirmDialogService,
+    private router: Router
   ) {
-    this.selectedTemplate$ = combineLatest([
+    const src = combineLatest([
       this.route.paramMap,
-      this.reload$,
-    ]).pipe(
-      map(([params, _reload]) => params),
-      map((params) => params.get('id')),
-      switchMap((id) =>
-        this.templateService.templates$.pipe(
-          take(1),
-          map((templates) => templates.find((t) => t.id == id))
-        )
+      this.templateService.templates$,
+    ]);
+
+    this.selectedTemplate$ = src.pipe(
+      map(([params, templates]): Template | undefined =>
+        templates.find((t) => t.id == params.get('id'))
       ),
-      tap((template) => {
-        this.templateFormService.setValue(template!);
-      }),
       shareReplay(1)
     );
+
+    this.selectedTemplate$
+      .pipe(
+        takeUntil(this.onDestroy$),
+        filter((template) => template !== undefined)
+      )
+      .subscribe((template) => {
+        this.templateFormService.setValue(template!);
+      });
+
+    src.pipe(takeUntil(this.onDestroy$)).subscribe(([params, templates]) => {
+      const template = templates.find((t) => t.id == params.get('id'));
+
+      if (template !== undefined) return;
+
+      if (templates.length > 0) {
+        this.router.navigate([templates[0].id], {
+          relativeTo: this.route.parent,
+        });
+      } else {
+        this.router.navigate(['../'], { relativeTo: this.route });
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 
   updateTemplate(id: string) {
@@ -70,7 +90,6 @@ export class TemplateFormComponent {
         };
       }),
     });
-    this.reload$.next(null);
   }
 
   onAddFieldClick() {
