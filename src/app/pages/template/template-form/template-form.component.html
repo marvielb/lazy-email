@@ -6,7 +6,15 @@
     <div class="card-body">
       <h2 class="card-title">
         <app-side-bar-toggle class="lg:hidden"></app-side-bar-toggle>
-        <span class="ml-2 md:ml-0">{{ template.name }}</span>
+        <div class="flex justify-between w-full">
+          <span class="ml-2 md:ml-0">{{ template.name }}</span>
+          <button
+            (click)="onDeleteTemplateClick(template.id)"
+            class="btn btn-error btn-outline"
+          >
+            DELETE
+          </button>
+        </div>
       </h2>
 
       <div class="block md:flex">
@@ -33,7 +41,7 @@
       </div>
       <div
         formArrayName="fields"
-        class="border-4 border-base-200 card w-full h-full max-h-72 overflow-auto  bg-base-100 mt-4"
+        class="border-4 border-base-200 card w-full h-full max-h-72 overflow-auto bg-base-100 mt-4"
       >
         <div class="card-body">
           <div class="flex gap-5">
@@ -123,7 +131,7 @@
           </div>
         </div>
       </div>
-      <div class="border-4 border-base-200 card w-full h-full  bg-base-100 mt-4">
+      <div class="border-4 border-base-200 card w-full h-full bg-base-100 mt-4">
         <div class="card-body">
           <h2 class="card-title">Body</h2>
           <div class="flex justify-center h-full mt-3">

@@ -93,4 +93,16 @@ export class TemplateFormComponent {
         this.templateFormService.form.markAsDirty();
       });
   }
+
+  onDeleteTemplateClick(id: string) {
+    this.confirmDialog
+      .open({
+        title: 'Confirmation',
+        content: 'Are you sure you want to delete this template?',
+      })
+      .pipe(filter((c) => c == true))
+      .subscribe(() => {
+        this.templateService.deleteTemplate(id);
+      });
+  }
 }
