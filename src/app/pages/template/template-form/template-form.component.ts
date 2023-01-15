@@ -9,6 +9,7 @@ import {
   shareReplay,
   Subject,
   switchMap,
+  take,
   takeUntil,
 } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
@@ -58,7 +59,7 @@ export class TemplateFormComponent implements OnDestroy {
       .pipe(
         takeUntil(this.onDestroy$),
         filter((template) => template === undefined),
-        switchMap(() => this.templateService.templates$)
+        switchMap(() => this.templateService.templates$.pipe(take(1)))
       )
       .subscribe((templates) => {
         if (templates.length > 0) {
