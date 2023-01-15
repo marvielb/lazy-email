@@ -3,13 +3,13 @@
 }
 
 .icon {
-  @apply hover:bg-accent-focus flex justify-center p-3 rounded-full hover:rounded-3xl bg-base-100 duration-100 ease-linear;
+  @apply hover:bg-primary-focus flex justify-center p-3 rounded-full hover:rounded-3xl bg-base-100 duration-100 ease-linear;
 
   .indicator {
-    @apply absolute left-0 bg-accent-content w-1 h-10 rounded-md;
+    @apply absolute left-0 bg-primary-content w-1 h-10 rounded-md;
   }
 }
 
 .icon-selected {
-  @apply bg-accent-focus rounded-3xl;
+  @apply bg-primary-focus rounded-3xl;
 }

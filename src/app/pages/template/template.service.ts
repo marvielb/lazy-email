@@ -61,4 +61,21 @@ export class TemplateService {
         this._templates$.next(templates.filter((t) => t.id != id))
       );
   }
+
+  addTemplate(): Template {
+    const template: Template = {
+      id: crypto.randomUUID(),
+      name: '',
+      defaultCC: '',
+      defaultTo: '',
+      fields: [],
+      body: '',
+    };
+    this.templates$
+      .pipe(take(1))
+      .subscribe((templates) =>
+        this._templates$.next([...templates, template])
+      );
+    return template;
+  }
 }
