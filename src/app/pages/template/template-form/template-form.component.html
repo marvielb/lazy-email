@@ -6,14 +6,15 @@
     <div class="card-body">
       <h2 class="card-title">
         <app-side-bar-toggle class="lg:hidden"></app-side-bar-toggle>
-        <div class="flex justify-between w-full">
-          <span class="ml-2 md:ml-0">{{ template.name }}</span>
-          <button
-            (click)="onDeleteTemplateClick(template.id)"
-            class="btn btn-error btn-outline"
-          >
-            DELETE
-          </button>
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Name</span>
+          </label>
+          <input
+            type="text"
+            class="input w-full bg-base-300"
+            formControlName="name"
+          />
         </div>
       </h2>
 
@@ -144,6 +145,12 @@
         </div>
       </div>
       <div class="card-actions justify-end mt-6">
+        <button
+          (click)="onDeleteTemplateClick(template.id)"
+          class="btn btn-error btn-outline self-center"
+        >
+          DELETE
+        </button>
         <button
           class="btn btn-primary"
           [ngClass]="

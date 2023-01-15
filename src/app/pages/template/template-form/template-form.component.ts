@@ -8,6 +8,7 @@ import {
   Observable,
   shareReplay,
   Subject,
+  switchMap,
   takeUntil,
 } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
@@ -53,11 +54,13 @@ export class TemplateFormComponent implements OnDestroy {
         this.templateFormService.setValue(template!);
       });
 
-    combineLatest([this.selectedTemplate$, this.templateService.templates$])
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe(([template, templates]) => {
-        if (template !== undefined) return;
-
+    this.selectedTemplate$
+      .pipe(
+        takeUntil(this.onDestroy$),
+        filter((template) => template === undefined),
+        switchMap(() => this.templateService.templates$)
+      )
+      .subscribe((templates) => {
         if (templates.length > 0) {
           this.router.navigate([templates[0].id], {
             relativeTo: this.route.parent,
