@@ -1,6 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { map, Observable, switchMap, take, tap } from 'rxjs';
+import {
+  filter,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  shareReplay,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs';
+import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { Template } from '../template/template.model';
 import { TemplateService } from '../template/template.service';
 
@@ -9,35 +21,37 @@ import { TemplateService } from '../template/template.service';
   templateUrl: './send.component.html',
   styleUrls: ['./send.component.scss'],
 })
-export class SendComponent {
+export class SendComponent implements OnDestroy {
+  onDestroy$: Subject<void> = new Subject();
   templates$: Observable<Array<Template>> =
     this.templateService.templates$.pipe(
       map((t) => t.sort((t1, t2) => (t1.name < t2.name ? -1 : 1)))
     );
   selectedTemplateForm = this.fb.control('');
-  selectedTemplate$: Observable<Template | undefined> =
+  selectedTemplateConfirmChanges$: Observable<boolean> =
     this.selectedTemplateForm.valueChanges.pipe(
-      switchMap((v) =>
+      mergeMap(() =>
+        this.sendForm.dirty == false
+          ? of(true)
+          : this.confirmDialog.open({
+              title: 'Confirmation',
+              content:
+                'Are you sure you want to select another template? All unsaved changes will be lost!',
+            })
+      ),
+      shareReplay(1)
+    );
+
+  selectedTemplate$: Observable<Template | undefined> =
+    this.selectedTemplateConfirmChanges$.pipe(
+      filter((confirmedChange) => confirmedChange === true),
+      switchMap(() =>
         this.templateService.templates$.pipe(
           take(1),
-          map((ts) => ts.find((t) => t.id == v))
+          map((ts) => ts.find((t) => t.id == this.selectedTemplateForm.value))
         )
       ),
-      tap((template) => {
-        this.sendFormFields.clear();
-        this.sendForm.reset();
-        template!.fields
-          .map((f) =>
-            this.fb.group({ id: [f.id], name: [f.name], value: [''] })
-          )
-          .forEach((c) => this.sendFormFields.push(c));
-
-        this.sendForm.setValue({
-          to: template!.defaultTo,
-          cc: template!.defaultCC,
-          fields: template!.fields.map((f) => ({ ...f, value: '' })),
-        });
-      })
+      shareReplay(1)
     );
 
   sendForm = this.fb.group({
@@ -52,6 +66,43 @@ export class SendComponent {
 
   constructor(
     protected templateService: TemplateService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    public confirmDialog: ConfirmDialogService
+  ) {
+    this.selectedTemplateConfirmChanges$
+      .pipe(
+        takeUntil(this.onDestroy$),
+        filter((confirmed) => confirmed === false)
+      )
+      .subscribe(() => {
+        this.selectedTemplate$.pipe(take(1)).subscribe((template) =>
+          this.selectedTemplateForm.setValue(template!.id, {
+            emitEvent: false,
+          })
+        );
+      });
+
+    this.selectedTemplate$
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((template) => {
+        this.sendFormFields.clear();
+        this.sendForm.reset();
+        template!.fields
+          .map((f) =>
+            this.fb.group({ id: [f.id], name: [f.name], value: [''] })
+          )
+          .forEach((c) => this.sendFormFields.push(c));
+
+        this.sendForm.setValue({
+          to: template!.defaultTo,
+          cc: template!.defaultCC,
+          fields: template!.fields.map((f) => ({ ...f, value: '' })),
+        });
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
+  }
 }
