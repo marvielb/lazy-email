@@ -28,7 +28,7 @@ export class SendUnsavedGuard implements CanDeactivate<unknown> {
     return component.confirmDialog.open({
       title: 'Confirmation',
       content:
-        'Are you sure you want to select another template? All unsaved changes will be lost!',
+        'Are you sure you want to leave? All unsaved changes will be lost!',
     });
   }
 }
