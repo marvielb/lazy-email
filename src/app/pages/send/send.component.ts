@@ -15,6 +15,7 @@ import {
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { Template } from '../template/template.model';
 import { TemplateService } from '../template/template.service';
+const Handlebars = require('handlebars/dist/cjs/handlebars');
 
 @Component({
   selector: 'app-send',
@@ -53,6 +54,11 @@ export class SendComponent implements OnDestroy {
       ),
       shareReplay(1)
     );
+
+  templateCompiler$: Observable<any> = this.selectedTemplate$.pipe(
+    map((st) => Handlebars.compile(st?.body)),
+    shareReplay(1)
+  );
 
   sendForm = this.fb.group({
     to: ['', Validators.required],
@@ -104,5 +110,33 @@ export class SendComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
+  }
+
+  onSendClick() {
+    const params = this.sendFormFields.controls
+      .map((ff) => ff.value)
+      .reduce((p, c) => {
+        p[c.id] = c.value;
+        return p;
+      }, {});
+    this.templateCompiler$
+      .pipe(
+        take(1),
+        map((compiler) => compiler(params)),
+        switchMap((compiled) =>
+          this.confirmDialog
+            .open({
+              title: 'Are you sure you want to send the following?',
+              content: compiled,
+            })
+            .pipe(
+              filter((confirmed) => confirmed === true),
+              map(() => compiled)
+            )
+        )
+      )
+      .subscribe((compiled) => {
+        console.log(compiled);
+      });
   }
 }
