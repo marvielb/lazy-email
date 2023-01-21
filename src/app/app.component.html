@@ -1,1 +1,6 @@
-<app-side-bar></app-side-bar>
+<ng-container *ngIf="authService.user$ | async as user; else loginComponent">
+  <app-side-bar></app-side-bar>
+</ng-container>
+<ng-template #loginComponent>
+  <app-login></app-login>
+</ng-template>
