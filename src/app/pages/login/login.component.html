@@ -4,7 +4,14 @@
   <div class="card-body">
     <h2 class="card-title justify-center">Choose an Email Provider</h2>
     <div class="card-actions justify-center mt-7">
-      <button class="btn btn-primary">Login with Google</button>
+      <button
+        [disabled]="!(btnEnabled$ | async)"
+        (click)="onClick()"
+        class="btn btn-primary"
+      >
+        Login with Google
+      </button>
+      <!-- <div id="gbtn"></div> -->
     </div>
   </div>
 </div>
