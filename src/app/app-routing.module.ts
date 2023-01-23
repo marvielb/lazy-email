@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './pages/login/login.component';
 import { SendUnsavedGuard } from './pages/send/send-unsaved.guard';
 import { SendComponent } from './pages/send/send.component';
 import { TemplateFormComponent } from './pages/template/template-form/template-form.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
       },
     ],
   },
+  { path: 'account', component: LoginComponent },
 ];
 
 @NgModule({
