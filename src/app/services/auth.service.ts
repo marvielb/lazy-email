@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import {
   filter,
-  from,
+  iif,
   map,
   merge,
   mergeMap,
@@ -24,6 +24,7 @@ export class AuthService {
   private _gapiClientLoaded$: ReplaySubject<void> = new ReplaySubject();
   private _loginToken$: ReplaySubject<google.accounts.oauth2.TokenResponse> =
     new ReplaySubject();
+  private _logout$: ReplaySubject<void> = new ReplaySubject();
 
   private _tokenClient$: Observable<google.accounts.oauth2.TokenClient | null> =
     this._gapiClientLoaded$.pipe(
@@ -56,17 +57,40 @@ export class AuthService {
     tap((token) => gapi.client.setToken({ access_token: token }))
   );
 
-  public token$: Observable<string> = merge(
+  public token$: Observable<string | null> = merge(
     this._loginToken$
       .asObservable()
       .pipe(map((loginToken) => loginToken.access_token)),
-    this._localStorageToken$
+    this._localStorageToken$,
+    this._logout$.pipe(map(() => null))
   ).pipe(shareReplay(1));
 
-  public user$: Observable<User> = this.token$.pipe(
-    switchMap(() => from(gapi.client.gmail.users.getProfile({ userId: 'me' }))),
-    map((profile): User => {
-      return { email: profile.result.emailAddress! };
+  public user$: Observable<User | null> = this.token$.pipe(
+    //switchMap(() => from(gapi.client.gmail.users.getProfile({ userId: 'me' }))),
+    switchMap(
+      (
+        token
+      ): Observable<gapi.client.Response<gapi.client.gmail.Profile> | null> =>
+        iif(
+          () => token !== null,
+          new Observable((observer) => {
+            gapi.client.gmail.users
+              .getProfile({ userId: 'me' })
+              .then((response) => {
+                this.ngZone.run(() => {
+                  observer.next(response);
+                  observer.complete();
+                });
+              });
+          }),
+          of(null)
+        )
+    ),
+    map((profile): User | null => {
+      if (profile !== null) {
+        return { email: profile?.result.emailAddress! };
+      }
+      return null;
     }),
     shareReplay(1)
   );
@@ -89,6 +113,10 @@ export class AuthService {
       );
   }
 
+  public logout() {
+    this._logout$.next();
+  }
+
   constructor(private ngZone: NgZone) {
     gapi.load('client', async () => {
       await gapi.client.init({
@@ -106,6 +134,10 @@ export class AuthService {
         'googleClientTokenExpiration',
         Number(Math.floor(Date.now() / 1000) + loginToken.expires_in).toString()
       );
+    });
+    this._logout$.subscribe(() => {
+      localStorage.removeItem('googleClientToken');
+      localStorage.removeItem('googleClientTokenExpiration');
     });
     this.user$.subscribe(console.log);
   }

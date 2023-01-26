@@ -1,5 +1,5 @@
 import { ApplicationRef, Component } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -11,12 +11,20 @@ export class LoginComponent {
   userToken$: Subject<string> = new Subject();
   btnEnabled$: Observable<boolean> = this.authService.tokenClientLoaded$;
 
+  loggedInShow$: Observable<boolean> = this.authService.token$.pipe(
+    map((token) => (token === null ? false : true))
+  );
+
   constructor(
     protected authService: AuthService,
     protected applicationRef: ApplicationRef
   ) {}
 
-  onClick() {
+  onLoginClick() {
     this.authService.login();
+  }
+
+  onLogoutClick() {
+    this.authService.logout();
   }
 }

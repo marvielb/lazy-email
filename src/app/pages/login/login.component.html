@@ -8,14 +8,23 @@
         <span class="ml-2"> Account </span>
       </h2>
       <div class="card-actions justify-center mt-7">
-        <button
-          [disabled]="!(btnEnabled$ | async)"
-          (click)="onClick()"
-          class="btn btn-primary"
-        >
-          Login with Google
-        </button>
-        <!-- <div id="gbtn"></div> -->
+        <div *ngIf="loggedInShow$ | async; else loginButton">
+          <div><b>Email:</b> {{ (authService.user$ | async)?.email }}</div>
+          <div class="flex justify-center mt-5">
+            <button (click)="onLogoutClick()" class="btn btn-outline btn-error">
+              Logout
+            </button>
+          </div>
+        </div>
+        <ng-template #loginButton>
+          <button
+            [disabled]="!(btnEnabled$ | async)"
+            (click)="onLoginClick()"
+            class="btn btn-primary"
+          >
+            Login with Google
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>
