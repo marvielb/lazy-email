@@ -1,5 +1,6 @@
-import { ApplicationRef, Component } from '@angular/core';
-import { map, Observable, Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { filter, map, Observable, Subject } from 'rxjs';
+import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class LoginComponent {
 
   constructor(
     protected authService: AuthService,
-    protected applicationRef: ApplicationRef
+    private confirmDialogService: ConfirmDialogService
   ) {}
 
   onLoginClick() {
@@ -25,6 +26,14 @@ export class LoginComponent {
   }
 
   onLogoutClick() {
-    this.authService.logout();
+    this.confirmDialogService
+      .open({
+        title: 'Confirmation',
+        content: 'Are you sure you want to logout?',
+      })
+      .pipe(filter((c) => c === true))
+      .subscribe(() => {
+        this.authService.logout();
+      });
   }
 }
