@@ -31,7 +31,7 @@ export class AuthService {
       map(() =>
         google.accounts.oauth2.initTokenClient({
           client_id: environment.googleClientId,
-          scope: 'https://www.googleapis.com/auth/gmail.readonly',
+          scope: 'https://www.googleapis.com/auth/gmail.send',
           callback: (tokenResponse: google.accounts.oauth2.TokenResponse) => {
             this.ngZone.run(() => {
               this._loginToken$.next(tokenResponse);
@@ -139,6 +139,5 @@ export class AuthService {
       localStorage.removeItem('googleClientToken');
       localStorage.removeItem('googleClientTokenExpiration');
     });
-    this.user$.subscribe(console.log);
   }
 }

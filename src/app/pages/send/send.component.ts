@@ -135,8 +135,33 @@ export class SendComponent implements OnDestroy {
             )
         )
       )
-      .subscribe((compiled) => {
-        console.log(compiled);
+      .subscribe(async (compiled) => {
+        const subject = 'Code';
+        const mimeData = [
+          'From: mauriciobernardo309@gmail.com',
+          'To: mauriciobernardo309@gmail.com',
+          'Subject: =?utf-8?B?' +
+            window.btoa(encodeURIComponent(subject)) +
+            '?=',
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset=UTF-8',
+          'Content-Transfer-Encoding: 7bit',
+          '',
+          compiled,
+        ]
+          .join('\n')
+          .trim();
+        const raw = window.btoa(mimeData);
+        gapi.client.gmail.users.messages
+          .send({
+            userId: 'me',
+            resource: {
+              raw: raw,
+            },
+          })
+          .execute((res) => {
+            console.log(res);
+          });
       });
   }
 }
