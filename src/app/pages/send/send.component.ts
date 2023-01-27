@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import {
+  combineLatest,
   filter,
   map,
   mergeMap,
@@ -14,6 +15,7 @@ import {
 } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EmailService } from 'src/app/services/email.service';
 import { Template } from '../template/template.model';
 import { TemplateService } from '../template/template.service';
 const Handlebars = require('handlebars/dist/cjs/handlebars');
@@ -75,7 +77,8 @@ export class SendComponent implements OnDestroy {
     protected templateService: TemplateService,
     private fb: FormBuilder,
     public confirmDialog: ConfirmDialogService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    protected emailService: EmailService
   ) {
     this.selectedTemplateConfirmChanges$
       .pipe(
@@ -121,8 +124,9 @@ export class SendComponent implements OnDestroy {
         p[c.id] = c.value;
         return p;
       }, {});
-    this.templateCompiler$
-      .pipe(
+
+    combineLatest([
+      this.templateCompiler$.pipe(
         take(1),
         map((compiler) => compiler(params)),
         switchMap((compiled) =>
@@ -136,34 +140,16 @@ export class SendComponent implements OnDestroy {
               map(() => compiled)
             )
         )
-      )
-      .subscribe(async (compiled) => {
-        const subject = 'Code';
-        const mimeData = [
-          'From: mauriciobernardo309@gmail.com',
-          'To: mauriciobernardo309@gmail.com',
-          'Subject: =?utf-8?B?' +
-            window.btoa(encodeURIComponent(subject)) +
-            '?=',
-          'MIME-Version: 1.0',
-          'Content-Type: text/plain; charset=UTF-8',
-          'Content-Transfer-Encoding: 7bit',
-          '',
-          compiled,
-        ]
-          .join('\n')
-          .trim();
-        const raw = window.btoa(mimeData);
-        gapi.client.gmail.users.messages
-          .send({
-            userId: 'me',
-            resource: {
-              raw: raw,
-            },
-          })
-          .execute((res) => {
-            console.log(res);
-          });
+      ),
+      this.selectedTemplate$.pipe(filter((t) => t !== undefined)),
+    ]).subscribe(([compiled, template]) => {
+      const form = this.sendForm.value;
+      this.emailService.sendEmail({
+        subject: template?.name!,
+        to: form.to!,
+        cc: form.cc!,
+        body: compiled,
       });
+    });
   }
 }
