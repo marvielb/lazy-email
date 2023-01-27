@@ -13,6 +13,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/components/confirm-dialog/confirm-dialog.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { Template } from '../template/template.model';
 import { TemplateService } from '../template/template.service';
 const Handlebars = require('handlebars/dist/cjs/handlebars');
@@ -73,7 +74,8 @@ export class SendComponent implements OnDestroy {
   constructor(
     protected templateService: TemplateService,
     private fb: FormBuilder,
-    public confirmDialog: ConfirmDialogService
+    public confirmDialog: ConfirmDialogService,
+    protected authService: AuthService
   ) {
     this.selectedTemplateConfirmChanges$
       .pipe(
