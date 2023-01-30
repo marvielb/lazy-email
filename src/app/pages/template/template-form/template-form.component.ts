@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, OnDestroy } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   combineLatest,
@@ -27,6 +28,7 @@ import { TemplateService } from '../template.service';
 export class TemplateFormComponent implements OnDestroy {
   selectedTemplate$: Observable<Template | undefined>;
   onDestroy$: Subject<void> = new Subject();
+  name = this.templateFormService.form.get('name');
 
   constructor(
     private route: ActivatedRoute,

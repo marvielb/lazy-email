@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Template } from './template.model';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { Template } from './template.model';
 })
 export class TemplateFormService {
   form = this.fb.group({
-    name: [''],
+    name: ['', [Validators.required]],
     defaultTo: [''],
     defaultCC: [''],
     fields: this.fb.array([]),
