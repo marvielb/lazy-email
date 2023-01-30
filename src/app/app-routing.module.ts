@@ -8,6 +8,7 @@ import { TemplateSidebarComponent } from './pages/template/template-sidebar/temp
 import { UnsavedGuard } from './pages/template/unsaved.guard';
 
 const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'send' },
   { path: 'send', component: SendComponent, canDeactivate: [SendUnsavedGuard] },
   {
     path: 'template',
