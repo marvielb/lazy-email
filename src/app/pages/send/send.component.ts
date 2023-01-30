@@ -29,6 +29,7 @@ export class SendComponent implements OnDestroy {
   onDestroy$: Subject<void> = new Subject();
   templates$: Observable<Array<Template>> =
     this.templateService.templates$.pipe(
+      map((ts) => ts.filter((t) => t.name.length > 0)),
       map((t) => t.sort((t1, t2) => (t1.name < t2.name ? -1 : 1)))
     );
   selectedTemplateForm = this.fb.control('');
