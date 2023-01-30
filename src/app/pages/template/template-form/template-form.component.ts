@@ -124,6 +124,7 @@ export class TemplateFormComponent implements OnDestroy {
       .pipe(filter((c) => c == true))
       .subscribe(() => {
         this.templateService.deleteTemplate(id);
+        this.templateFormService.form.markAsPristine();
       });
   }
 }
