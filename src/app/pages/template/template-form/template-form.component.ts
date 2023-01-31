@@ -2,6 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import {
   combineLatest,
   filter,
@@ -36,7 +37,8 @@ export class TemplateFormComponent implements OnDestroy {
     public templateFormService: TemplateFormService,
     private dialog: Dialog,
     public confirmDialog: ConfirmDialogService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.selectedTemplate$ = combineLatest([
       this.route.paramMap,
@@ -127,6 +129,7 @@ export class TemplateFormComponent implements OnDestroy {
       .subscribe(() => {
         this.templateService.deleteTemplate(id);
         this.templateFormService.form.markAsPristine();
+        this.toastr.success('Successfully Deleted Template!');
       });
   }
 }

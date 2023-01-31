@@ -13,6 +13,8 @@ import { DialogModule } from '@angular/cdk/dialog';
 import { TemplateFieldFormComponent } from './pages/template/template-field-form/template-field-form.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,24 @@ import { LoginComponent } from './pages/login/login.component';
     ConfirmDialogComponent,
     LoginComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, DialogModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    DialogModule,
+    ToastrModule.forRoot({
+      toastClass: 'alert',
+      iconClasses: {
+        error: 'alert-error',
+        info: 'alert-info',
+        success: 'alert-success',
+        warning: 'alert-warning',
+      },
+      tapToDismiss: true,
+      timeOut: 2000,
+    }),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
