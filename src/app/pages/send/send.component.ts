@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import {
   combineLatest,
   filter,
@@ -79,7 +80,8 @@ export class SendComponent implements OnDestroy {
     private fb: FormBuilder,
     public confirmDialog: ConfirmDialogService,
     protected authService: AuthService,
-    protected emailService: EmailService
+    protected emailService: EmailService,
+    private toastr: ToastrService
   ) {
     this.selectedTemplateConfirmChanges$
       .pipe(
@@ -151,6 +153,7 @@ export class SendComponent implements OnDestroy {
         cc: form.cc!,
         body: compiled,
       });
+      this.toastr.success('Successfully sent the email!');
     });
   }
 }
