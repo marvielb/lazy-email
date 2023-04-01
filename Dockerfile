@@ -6,6 +6,7 @@ RUN npm install
 COPY . .
 
 ### STAGE 2: Run ###
+ENV NODE_OPTIONS="--max-old-space-size=512"
 RUN npm run build
 FROM nginx:latest
 COPY nginx.conf /etc/nginx/nginx.conf
