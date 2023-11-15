@@ -16,11 +16,11 @@ Head over in the [Templates tab](https://email.marvielb.com/template) and click 
 - `Default To` default recepient of the email
 - `Default CC` default CC of the email
 - `Fields` fields are a list of "variables" so to speak that will be replaced later on upon sending the email
-- `Body` is the content of the email
+- `Body` is the content of the email. You use the fileds defined by surrounding it with double curly braces `{{field_id_here}}`. It uses [handlebars](https://handlebarsjs.com/guide/#what-is-handlebars) syntax.
 
 In this tutorial, I'll put the following details. Also add a field with id of `database_name` and name of `Database Name`. After filling these up, click `Save`
 
-![image](https://github.com/marvielb/lazy-email/assets/50162243/3fd79791-aac2-48ed-a800-f09f4f7c58b3)
+![image](https://github.com/marvielb/lazy-email/assets/50162243/23ea3fc2-f2cb-485e-94dc-3146604e288c)
 
 ## 2. Account
 We must login our account that will be used to send our emails. Do note that only gmail is supported for now but if requests comes in, other email providers can be supported. 
@@ -41,6 +41,12 @@ Once the proper setup has been placed, you can now send emails.
 4. Click on `Send` button.
 5. A dialog will pop up and after confirming the contents, hit send.
 6. After that, a message will pop up saying it has been sent.
+
+## Result
+After sending in the app, the following email should be sent. Notice that the `database_name` from the template earlier has been replaced by the text we input during the sending of the email.
+
+![image](https://github.com/marvielb/lazy-email/assets/50162243/374332ed-145f-44a3-9c72-b0b9922e45ed)
+
 
 # Installation
 You must configure the environment.ts file for it to serve / build correctly. You can copy the environment.example.ts file and edit that. To copy, you can run the following command:
