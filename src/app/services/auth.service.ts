@@ -31,7 +31,7 @@ export class AuthService {
       map(() =>
         google.accounts.oauth2.initTokenClient({
           client_id: environment.googleClientId,
-          scope: 'https://www.googleapis.com/auth/gmail.send',
+          scope: 'https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.compose',
           callback: (tokenResponse: google.accounts.oauth2.TokenResponse) => {
             this.ngZone.run(() => {
               this._loginToken$.next(tokenResponse);
