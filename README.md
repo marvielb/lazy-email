@@ -42,7 +42,7 @@ Once the proper setup has been placed, you can now send emails.
 5. A dialog will pop up and after confirming the contents, hit send.
 6. After that, a message will pop up saying it has been sent.
 
-## Result
+## 4. Result
 After sending in the app, the following email should be sent. Notice that the `database_name` from the template earlier has been replaced by the text we input during the sending of the email.
 
 ![image](https://github.com/marvielb/lazy-email/assets/50162243/374332ed-145f-44a3-9c72-b0b9922e45ed)
