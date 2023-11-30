@@ -20,6 +20,12 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Create Environment.ts File
+      uses: "finnp/create-file-action@master"
+      env:
+        FILE_NAME: "src/environments/environment.ts"
+        FILE_DATA: ${{ secrets.ENVIRONMENT }}
+
     - name: Build
       run: npm run build
 
